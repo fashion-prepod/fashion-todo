@@ -17,6 +17,15 @@ export const TodoPage = () => {
         setTodos((todos) => [...todos, todo]);
     };
 
+    const todoStatusSwitch = (todoIdToChange) => {
+        const changedTodos = todos.map(({id, done, ...todo}) => ({
+            ...todo,
+            id,
+            done: id === todoIdToChange ? !done : done
+        }));
+        setTodos(changedTodos);
+    };
+
     return (
     <div className={styles.wrapper}>
         <div className={styles.leftSide}>
@@ -24,7 +33,10 @@ export const TodoPage = () => {
         </div>
         <div className={styles.rightSide}>
             <TodoFilter/>
-            <TodoList todos={todos}/>           
+            <TodoList 
+                todos={todos}
+                onTodoStatusChange={todoStatusSwitch}
+            />           
         </div>       
     </div>
     )

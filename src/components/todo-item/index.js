@@ -5,16 +5,18 @@ import {TiDeleteOutline} from 'react-icons/ti';
 import styles from './index.module.css';
 
 
-export const TodoItem = ({todoText, id, done}) => {
+export const TodoItem = ({todoText, id, done, onTodoStatusChange}) => {
 
     return (
-    <li className={styles.wrapper}>
+    <li className={`${styles.wrapper} ${done ? styles.done : ''}`}>
         <p>
             {todoText}
         </p>
-        <div>
+        <div onClick={() => onTodoStatusChange(id)}>
             {done ? 
-                <AiFillFlag className={styles.todoStatus}/> :
+                <AiFillFlag 
+                    className={`${styles.todoStatus} ${styles.iconDone}`}
+                /> :
                 <AiOutlineFlag className={styles.todoStatus}/>
             }
         </div>
