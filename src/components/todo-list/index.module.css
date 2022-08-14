@@ -1,3 +1,24 @@
 .wrapper {
     padding: 20px;    
+    overflow-y: auto;
+    width: 90%;
+    margin: 0 auto;
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    width: 6px;
+    background: lightgray;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: darkgray;
+    -webkit-border-radius: 1ex;
+   
+}
+
+::-webkit-scrollbar-corner {
+    background: #2d2d2d;
+    border-radius: 10px;
 }

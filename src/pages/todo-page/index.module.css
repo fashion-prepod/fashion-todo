@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('https://burst.shopifycdn.com/photos/vertical-mountain-peaks-at-sunrise.jpg?width=1200&format=pjpg&exif=1&iptc=1');
+    background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://burst.shopifycdn.com/photos/vertical-mountain-peaks-at-sunrise.jpg?width=1200&format=pjpg&exif=1&iptc=1');
     background-size: cover;
 }
 
