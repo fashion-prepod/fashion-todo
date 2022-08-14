@@ -3,7 +3,7 @@ import { TodoItem } from "../todo-item";
 import styles from './index.module.css';
 
 
-export const TodoList = ({todos, onTodoStatusChange}) => {
+export const TodoList = ({todos, onTodoStatusChange, onTodoDelete}) => {
 
     return (
         <ul className={styles.wrapper}>
@@ -11,6 +11,7 @@ export const TodoList = ({todos, onTodoStatusChange}) => {
                 (<TodoItem
                     key={id}
                     id={id}
+                    onTodoDelete={onTodoDelete}
                     onTodoStatusChange={onTodoStatusChange}
                     {...otherProps}
                 />))}

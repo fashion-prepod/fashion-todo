@@ -1,11 +1,19 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { AiFillFlag } from "react-icons/ai";
 import { AiOutlineFlag } from "react-icons/ai";
 import {TiDeleteOutline} from 'react-icons/ti';
 import styles from './index.module.css';
 
 
-export const TodoItem = ({todoText, id, done, onTodoStatusChange}) => {
+const TodoItemTemplate = ({
+    todoText,
+    id,
+    done,
+    onTodoStatusChange,
+    onTodoDelete
+}) => {
+
+    console.log(todoText);
 
     return (
     <li className={`${styles.wrapper} ${done ? styles.done : ''}`}>
@@ -20,9 +28,11 @@ export const TodoItem = ({todoText, id, done, onTodoStatusChange}) => {
                 <AiOutlineFlag className={styles.todoStatus}/>
             }
         </div>
-        <div>
+        <div onClick={() => onTodoDelete(id)}>
             <TiDeleteOutline className={styles.deleteIcon}/> 
         </div>
     </li>
     );
 };
+
+export const TodoItem = memo(TodoItemTemplate);

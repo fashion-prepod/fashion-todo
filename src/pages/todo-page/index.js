@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { UserInput } from '../../components/user-input';
 import { TodoList } from '../../components/todo-list';
 import { TodoFilter } from '../../components/todo-filter';
@@ -6,6 +6,7 @@ import styles from './index.module.css';
 
 export const TodoPage = () => {
     const [todos, setTodos] = useState([]);
+
 
     const todoAdd = (todoText) => {
         const todo = {
@@ -17,14 +18,24 @@ export const TodoPage = () => {
         setTodos((todos) => [...todos, todo]);
     };
 
-    const todoStatusSwitch = (todoIdToChange) => {
-        const changedTodos = todos.map(({id, done, ...todo}) => ({
-            ...todo,
-            id,
-            done: id === todoIdToChange ? !done : done
-        }));
-        setTodos(changedTodos);
+    const todoDelete = (todoIdToDelete) => {
+        setTodos((prevTodos) => prevTodos.filter(({id}) => id !== todoIdToDelete));
     };
+
+    const todoStatusSwitch = (todoIdToChange) => {
+        setTodos((prevTodos) => {
+            const changedTodos = prevTodos.map(({id, done, ...todo}) => ({
+                ...todo,
+                id,
+                done: id === todoIdToChange ? !done : done
+            }));
+
+            return changedTodos;
+        });
+    };
+
+    const onTodoStatusSwitch = useCallback(todoStatusSwitch, [setTodos]);
+    const onTodoDelete = useCallback(todoDelete, [setTodos]);
 
     return (
     <div className={styles.wrapper}>
@@ -35,7 +46,8 @@ export const TodoPage = () => {
             <TodoFilter/>
             <TodoList 
                 todos={todos}
-                onTodoStatusChange={todoStatusSwitch}
+                onTodoStatusChange={onTodoStatusSwitch}
+                onTodoDelete={onTodoDelete}
             />           
         </div>       
     </div>
