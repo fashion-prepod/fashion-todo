@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styles from './index.module.css';
 import { Validation } from "../../compound/validation";
 import {validate, VALIDATION_TYPE} from '../../utils/validate';
@@ -30,6 +30,23 @@ export const UserInput = ({ onTodoAdd }) => {
             setTodoText('');
         }
     };
+
+    const onEnterKeyDownHandler = ({key}) => {
+        if (key === 'Enter') {
+            onClickHandler();
+        }
+    };
+    
+
+    useEffect(() => {
+        window.addEventListener('keydown', onEnterKeyDownHandler);
+
+        return () => {
+           window.removeEventListener('keydown', onEnterKeyDownHandler);
+        };
+    }, [todoText]);
+
+
 
     return (
         <div className={styles.wrapper}>

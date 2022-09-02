@@ -1,11 +1,25 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { UserInput } from '../../components/user-input';
 import { TodoList } from '../../components/todo-list';
 import { TodoFilter } from '../../components/todo-filter';
+import { FILTER_CONFIG } from "../../components/todo-filter/constants";
+import { getTodosByFilter } from "../../utils/getTodosByFilter";
+import {TODOS} from '../../constants';
+import { storeTodos } from "../../utils/storeTodos";
 import styles from './index.module.css';
 
 export const TodoPage = () => {
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(() => {
+        const storageData = localStorage.getItem(TODOS);
+        if (storageData === null) {
+            return [];
+        } else {
+            return  JSON.parse(storageData);
+        }
+    });
+
+    const [filterStatus, setFilterStatus] = useState(FILTER_CONFIG.ALL);
+
 
 
     const todoAdd = (todoText) => {
@@ -14,28 +28,54 @@ export const TodoPage = () => {
             done: false,
             id: Math.random().toString()
         };
-      
-        setTodos((todos) => [...todos, todo]);
+
+        setTodos((todos) => {
+            const modifiedTodos = [...todos, todo];
+            storeTodos(modifiedTodos);
+            return modifiedTodos;
+        });
     };
 
     const todoDelete = (todoIdToDelete) => {
-        setTodos((prevTodos) => prevTodos.filter(({id}) => id !== todoIdToDelete));
+        setTodos((prevTodos) => {
+            const modifiedTodos = prevTodos.filter(({id}) => id !== todoIdToDelete)
+            storeTodos(modifiedTodos);
+            return modifiedTodos;
+        });
     };
 
     const todoStatusSwitch = (todoIdToChange) => {
         setTodos((prevTodos) => {
-            const changedTodos = prevTodos.map(({id, done, ...todo}) => ({
+            const modifiedTodos = prevTodos.map(({id, done, ...todo}) => ({
                 ...todo,
                 id,
                 done: id === todoIdToChange ? !done : done
             }));
+            storeTodos(modifiedTodos);
+            return modifiedTodos;
+        });
+    };
 
-            return changedTodos;
+    const todoTextEdit = (todoIdChange, todoTextChange) => {
+        setTodos((prevTodos) => {
+            const modifiedTodos = prevTodos.map(({id, todoText, ...todo}) => ({
+                ...todo,
+                id,
+                todoText: id === todoIdChange ? todoTextChange : todoText
+            }));
+            storeTodos(modifiedTodos);
+            return modifiedTodos;
         });
     };
 
     const onTodoStatusSwitch = useCallback(todoStatusSwitch, [setTodos]);
     const onTodoDelete = useCallback(todoDelete, [setTodos]);
+    const onTodoTextEdit = useCallback(todoTextEdit, [setTodos])
+
+    const filteredTodos = useMemo(() => {
+        return getTodosByFilter(todos, filterStatus);
+    }, [filterStatus, todos]);
+
 
     return (
     <div className={styles.wrapper}>
@@ -43,12 +83,16 @@ export const TodoPage = () => {
             <UserInput onTodoAdd={todoAdd} />
         </div>
         <div className={styles.rightSide}>
-            <TodoFilter/>
+            <TodoFilter 
+                filterStatus={filterStatus} 
+                onFilterClick={setFilterStatus}
+            />
             <TodoList 
-                todos={todos}
+                todos={filteredTodos}
                 onTodoStatusChange={onTodoStatusSwitch}
                 onTodoDelete={onTodoDelete}
-            />           
+                onTodoTextEdit={onTodoTextEdit}
+            />
         </div>       
     </div>
     )

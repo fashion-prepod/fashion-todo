@@ -1,7 +1,7 @@
-import React, {memo} from 'react';
+import React, {useState, memo} from 'react';
 import { AiFillFlag } from "react-icons/ai";
-import { AiOutlineFlag } from "react-icons/ai";
-import {TiDeleteOutline} from 'react-icons/ti';
+import { AiOutlineFlag, AiOutlineCheckCircle } from "react-icons/ai";
+import {TiDeleteOutline, TiPencil} from 'react-icons/ti';
 import styles from './index.module.css';
 
 
@@ -10,16 +10,46 @@ const TodoItemTemplate = ({
     id,
     done,
     onTodoStatusChange,
-    onTodoDelete
+    onTodoDelete,
+    onTodoTextEdit
 }) => {
 
-    console.log(todoText);
+    const [isEdditing, setIsEdditing] = useState(false);
+    const [inputText, setInputText] = useState('');
+
+    const onEditClick = () => {
+        setIsEdditing((prev) => {
+            if (prev) {
+                onTodoTextEdit(id, inputText);
+            }
+
+            return !prev;
+        });
+    };
 
     return (
     <li className={`${styles.wrapper} ${done ? styles.done : ''}`}>
         <p>
-            {todoText}
+            {
+                isEdditing ? 
+                <input 
+                    onChange={({target: {value}}) => setInputText(value) }
+                    className={styles.input}
+                    value={inputText}
+                    type="text"
+                    autoFocus
+                /> :
+                todoText
+            }
         </p>
+        <div onClick={onEditClick}>
+            {isEdditing ? <AiOutlineCheckCircle 
+                className={`${styles.todoStatus} ${styles.checkIcon}`}
+            /> : 
+            <TiPencil 
+                className={`${styles.todoStatus} ${styles.pencilIcon}`}
+            />}
+        </div>
         <div onClick={() => onTodoStatusChange(id)}>
             {done ? 
                 <AiFillFlag 
@@ -29,7 +59,7 @@ const TodoItemTemplate = ({
             }
         </div>
         <div onClick={() => onTodoDelete(id)}>
-            <TiDeleteOutline className={styles.deleteIcon}/> 
+            <TiDeleteOutline className={`${styles.todoStatus} ${styles.deleteIcon}`}/> 
         </div>
     </li>
     );
