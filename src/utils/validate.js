@@ -15,7 +15,11 @@ function validateMinLength (val) {
 export const VALIDATION_TYPE = {
     IS_EMPTY: "IS_EMPTY",
     ONLY_NUMBERS: "ONLY_NUMBERS",
-    MIN_LENGTH: "MIN_LENGTH"
+    MIN_LENGTH: "MIN_LENGTH",
+    // должна быть одна большая буква,
+    // один спец символ,
+    // не должно быть пробелов,
+
 };
 
 const VALIDATION_HANDLERS = {

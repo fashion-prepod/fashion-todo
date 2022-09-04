@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import { UserInput } from '../../components/user-input';
 import { TodoList } from '../../components/todo-list';
 import { TodoFilter } from '../../components/todo-filter';
@@ -20,7 +20,8 @@ export const TodoPage = () => {
 
     const [filterStatus, setFilterStatus] = useState(FILTER_CONFIG.ALL);
 
-
+    const todoInputRef = useRef();
+  
 
     const todoAdd = (todoText) => {
         const todo = {
@@ -66,6 +67,7 @@ export const TodoPage = () => {
             storeTodos(modifiedTodos);
             return modifiedTodos;
         });
+        todoInputRef.current.focus();
     };
 
     const onTodoStatusSwitch = useCallback(todoStatusSwitch, [setTodos]);
@@ -80,7 +82,7 @@ export const TodoPage = () => {
     return (
     <div className={styles.wrapper}>
         <div className={styles.leftSide}>
-            <UserInput onTodoAdd={todoAdd} />
+            <UserInput onTodoAdd={todoAdd} inputRef={todoInputRef}/>
         </div>
         <div className={styles.rightSide}>
             <TodoFilter 

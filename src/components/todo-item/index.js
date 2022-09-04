@@ -15,7 +15,7 @@ const TodoItemTemplate = ({
 }) => {
 
     const [isEdditing, setIsEdditing] = useState(false);
-    const [inputText, setInputText] = useState('');
+    const [inputText, setInputText] = useState(todoText);
 
     const onEditClick = () => {
         setIsEdditing((prev) => {

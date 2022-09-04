@@ -3,7 +3,7 @@ import styles from './index.module.css';
 import { Validation } from "../../compound/validation";
 import {validate, VALIDATION_TYPE} from '../../utils/validate';
 
-export const UserInput = ({ onTodoAdd }) => {
+export const UserInput = ({ onTodoAdd, inputRef }) => {
     const [todoText, setTodoText] = useState('');
     const [error, setError] = useState('');
 
@@ -56,6 +56,7 @@ export const UserInput = ({ onTodoAdd }) => {
                     onChange={onChangeHandler}
                     className={styles.input}
                     type='text'
+                    ref={inputRef}
                     autoFocus
                 />
             </Validation>
