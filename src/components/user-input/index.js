@@ -14,7 +14,7 @@ export const UserInput = ({ onTodoAdd, inputRef }) => {
         }
     };
     
-    const onClickHandler = () =>{
+    const onClickHandler = () => {
         const validateTodoTextConfig = [
             VALIDATION_TYPE.IS_EMPTY,
             VALIDATION_TYPE.ONLY_NUMBERS,
