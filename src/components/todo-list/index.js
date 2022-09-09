@@ -1,26 +1,17 @@
 import React from "react";
 import { TodoItem } from "../todo-item";
-import styles from './index.module.css';
+import { getTodos } from "../../redux/selectors";
+import { useSelector } from "react-redux";
+import styles from "./index.module.css";
 
+export const TodoList = () => {
+  const todos = useSelector(getTodos);
 
-export const TodoList = ({
-    todos,
-    onTodoStatusChange,
-    onTodoDelete,
-    onTodoTextEdit,
-}) => {
-
-    return (
-        <ul className={styles.wrapper}>
-            { todos.map(({id, ...otherProps}) => 
-                (<TodoItem
-                    key={id}
-                    id={id}
-                    onTodoDelete={onTodoDelete}
-                    onTodoStatusChange={onTodoStatusChange}
-                    onTodoTextEdit={onTodoTextEdit}
-                    {...otherProps}
-                />))}
-        </ul>
-    )
+  return (
+    <ul className={styles.wrapper}>
+      {todos.map(({ id, ...otherProps }) => (
+        <TodoItem key={id} id={id} {...otherProps} />
+      ))}
+    </ul>
+  );
 };
