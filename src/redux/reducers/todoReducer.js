@@ -1,5 +1,6 @@
 import { TODO } from "../actions/types";
-import { TODOS } from "../../constants";
+import { TODOS, FILTER_CONFIG } from "../../constants";
+
 
 const storageData = localStorage.getItem(TODOS);
 
@@ -13,10 +14,25 @@ const initialState = {
   todos: initialTodos,
   isLoading: false,
   error: null,
+  filter: FILTER_CONFIG.ALL,
 };
 
 export const todoReducer = (state = initialState, action) => {
   switch (action.type) {
+    case TODO.TODO_FETCH_COMPLETE:
+      return {
+        ...state,
+        todos: action.payload.todos.map(({id, title, completed}) => ({
+          id,
+          done: completed,
+          todoText: title
+        }))
+      }
+    case TODO.TODO_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload.isLoading
+      };
     case TODO.TODO_DELETE:
       return {
         ...state,
@@ -52,6 +68,11 @@ export const todoReducer = (state = initialState, action) => {
             id === action.payload.id ? action.payload.todoText : todoText,
         })),
       };
+    case TODO.TODO_FILTER: 
+      return {
+        ...state,
+        filter: action.payload.filterType
+      }
     default:
       return state;
   }

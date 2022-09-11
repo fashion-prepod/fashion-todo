@@ -29,12 +29,20 @@ const todoStatusChange = (id) => ({
   payload: { id },
 });
 
+const todoFilterChange = (filterType) => ({
+  type: TODO.TODO_FILTER,
+  payload: {
+    filterType
+  }
+});
+
 export default bindActionCreators(
   {
     addTodo,
     deleteTodo,
     editTodo,
     todoStatusChange,
+    todoFilterChange,
   },
   store.dispatch
 );
