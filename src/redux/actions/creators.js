@@ -32,8 +32,8 @@ const todoStatusChange = (id) => ({
 const todoFilterChange = (filterType) => ({
   type: TODO.TODO_FILTER,
   payload: {
-    filterType
-  }
+    filterType,
+  },
 });
 
 export default bindActionCreators(

@@ -2,31 +2,38 @@ import { useState } from "react";
 import { Validation } from "../../compound/validation";
 import { VALIDATION_TYPE } from "../../utils/validate";
 import { validate } from "../../utils/validate";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
 
-const { ONLY_NUMBERS, NO_SPACES, ONE_UPPERCASE, ONE_SPEC_SYMBOL } =
+const { ONLY_NUMBERS, NO_SPACES, ONE_UPPERCASE, ONE_SPEC_SYMBOL, IS_EMPTY } =
   VALIDATION_TYPE;
 
-const loginConfig = [ONLY_NUMBERS, NO_SPACES];
+const loginConfig = [ONLY_NUMBERS, NO_SPACES, IS_EMPTY];
 const passwordConfig = [ONE_UPPERCASE, ONE_SPEC_SYMBOL, NO_SPACES];
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
   const [loginError, setLoginError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [passwordConfirmError, setPasswordConfirmError] = useState("");
   const [loginText, setLoginText] = useState("");
   const [passwordText, setPasswordText] = useState("");
+  const [passwordConfirmText, setPasswordConfirmText] = useState("");
 
   const navigate = useNavigate();
 
   const clickHandler = () => {
     const loginError = validate(loginText, loginConfig);
     const passwordError = validate(passwordText, passwordConfig);
+    const passwordConfirmError =
+      passwordText !== passwordConfirmText
+        ? "Please enter equal passwords"
+        : validate(passwordConfirmText, passwordConfig);
 
     setLoginError(loginError);
     setPasswordError(passwordError);
+    setPasswordConfirmError(passwordConfirmError);
 
-    if (!loginError && !passwordError) {
+    if (!loginError && !passwordError && !passwordConfirmError) {
       navigate("/todos");
     }
   };
@@ -39,10 +46,14 @@ export const LoginPage = () => {
     setPasswordText(value);
   };
 
+  const passwordConfirmTextHandler = ({ target: { value } }) => {
+    setPasswordConfirmText(value);
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
-        <h1 className={styles.title}>Please log in</h1>
+        <h1 className={styles.title}>Register</h1>
         <div>
           <Validation error={loginError}>
             <input
@@ -64,11 +75,17 @@ export const LoginPage = () => {
           </Validation>
         </div>
         <div>
-          Dont have an account ? <br />
-          <Link to="/register">go to register</Link>
+          <Validation error={passwordConfirmError}>
+            <input
+              className={styles.input}
+              type="password"
+              value={passwordConfirmText}
+              onChange={passwordConfirmTextHandler}
+            />
+          </Validation>
         </div>
         <button onClick={clickHandler} className={styles.btn}>
-          Log in
+          Register
         </button>
       </div>
     </div>
