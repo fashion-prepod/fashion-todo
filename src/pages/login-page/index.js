@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Validation } from "../../compound/validation";
 import { VALIDATION_TYPE } from "../../utils/validate";
 import { validate } from "../../utils/validate";
 import { useNavigate, Link } from "react-router-dom";
+import { userAuth } from "../../redux/actions/async-actions";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../redux/selectors";
 import styles from "./index.module.css";
 
 const { ONLY_NUMBERS, NO_SPACES, ONE_UPPERCASE, ONE_SPEC_SYMBOL } =
@@ -18,6 +21,8 @@ export const LoginPage = () => {
   const [passwordText, setPasswordText] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(getUser);
 
   const clickHandler = () => {
     const loginError = validate(loginText, loginConfig);
@@ -27,7 +32,7 @@ export const LoginPage = () => {
     setPasswordError(passwordError);
 
     if (!loginError && !passwordError) {
-      navigate("/todos");
+      dispatch(userAuth(loginText, passwordText, 'signin'));
     }
   };
 
@@ -38,6 +43,12 @@ export const LoginPage = () => {
   const passwordChangeHandler = ({ target: { value } }) => {
     setPasswordText(value);
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/todos');
+    }
+  }, [user, navigate]);
 
   return (
     <div className={styles.wrapper}>
