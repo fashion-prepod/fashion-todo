@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Validation } from "../../compound/validation";
 import { VALIDATION_TYPE } from "../../utils/validate";
 import { validate } from "../../utils/validate";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../redux/selectors";
+import { userAuth } from "../../redux/actions/async-actions";
 import styles from "./index.module.css";
 
 const { ONLY_NUMBERS, NO_SPACES, ONE_UPPERCASE, ONE_SPEC_SYMBOL, IS_EMPTY } =
@@ -18,7 +21,8 @@ export const RegisterPage = () => {
   const [loginText, setLoginText] = useState("");
   const [passwordText, setPasswordText] = useState("");
   const [passwordConfirmText, setPasswordConfirmText] = useState("");
-
+  const user = useSelector(getUser);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const clickHandler = () => {
@@ -34,9 +38,15 @@ export const RegisterPage = () => {
     setPasswordConfirmError(passwordConfirmError);
 
     if (!loginError && !passwordError && !passwordConfirmError) {
-      navigate("/todos");
+      dispatch(userAuth(loginText, passwordText, "register"));
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/todos");
+    }
+  }, [user, navigate]);
 
   const loginChangeHandler = ({ target: { value } }) => {
     setLoginText(value);

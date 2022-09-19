@@ -57,15 +57,9 @@ export const todoReducer = (state = initialState, action) => {
         })),
       };
     case TODO.TODO_ADD:
-      const todo = {
-        todoText: action.payload.todoText,
-        done: false,
-        id: Math.random().toString(),
-      };
-
       return {
         ...state,
-        todos: [...state.todos, todo],
+        todos: [...state.todos, action.payload.todo],
       };
 
     case TODO.TODO_FILTER:

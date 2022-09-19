@@ -1,23 +1,24 @@
 .wrapper {
-    display: flex;
-    height: 100%;
-    align-items: stretch;
-    background-color: #F1F2F3;
+  display: flex;
+  height: 100%;
+  align-items: stretch;
+  background-color: #f1f2f3;
 }
 
 .leftSide {
-    flex: 1 1 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://burst.shopifycdn.com/photos/vertical-mountain-peaks-at-sunrise.jpg?width=1200&format=pjpg&exif=1&iptc=1');
-    background-size: cover;
+  flex: 1 1 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+    url("https://burst.shopifycdn.com/photos/vertical-mountain-peaks-at-sunrise.jpg?width=1200&format=pjpg&exif=1&iptc=1");
+  background-size: cover;
 }
 
 .rightSide {
-    flex: 2 1 500px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-direction: column;
+  flex: 2 1 500px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
 }

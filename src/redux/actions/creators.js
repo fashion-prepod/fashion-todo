@@ -2,12 +2,12 @@ import { TODO } from "./types";
 import { bindActionCreators } from "redux";
 import { store } from "../index";
 
-const addTodo = (todoText) => ({
-  type: TODO.TODO_ADD,
-  payload: {
-    todoText,
-  },
-});
+// const addTodo = (todoText) => ({
+//   type: TODO.TODO_ADD,
+//   payload: {
+//     todoText,
+//   },
+// });
 
 const deleteTodo = (id) => ({
   type: TODO.TODO_DELETE,
@@ -38,7 +38,7 @@ const todoFilterChange = (filterType) => ({
 
 export default bindActionCreators(
   {
-    addTodo,
+    // addTodo,
     deleteTodo,
     editTodo,
     todoStatusChange,

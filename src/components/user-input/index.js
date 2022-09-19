@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
 import { Validation } from "../../compound/validation";
 import { validate, VALIDATION_TYPE } from "../../utils/validate";
-import actions from "../../redux/actions/creators";
+import { addTodo } from "../../redux/actions/async-actions";
+import { useDispatch } from "react-redux";
 
 export const UserInput = ({ inputRef }) => {
   const [todoText, setTodoText] = useState("");
   const [error, setError] = useState("");
-  const { addTodo } = actions;
+  const dispatch = useDispatch();
 
   const onChangeHandler = ({ target: { value } }) => {
     setTodoText(value);
@@ -28,7 +29,7 @@ export const UserInput = ({ inputRef }) => {
     if (validateMessage) {
       setError(validateMessage);
     } else {
-      addTodo(todoText);
+      dispatch(addTodo(todoText));
       setTodoText("");
     }
   };

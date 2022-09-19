@@ -20,3 +20,5 @@ export const getTodosByFilter = createSelector(
 );
 
 export const getUser = (state) => state.user.user;
+export const getUserEmail = (state) => state.user.user?.email;
+
