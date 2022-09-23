@@ -4,7 +4,14 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
-import { doc, setDoc, collection, addDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  addDoc,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const USER_AUTH_CONFIG = {
   register: createUserWithEmailAndPassword,
@@ -12,7 +19,7 @@ const USER_AUTH_CONFIG = {
 };
 
 export const loadTodos = () => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch({
       type: TODO.TODO_LOADING,
       payload: {
@@ -20,24 +27,47 @@ export const loadTodos = () => {
       },
     });
 
-    fetch("https://jsonplaceholder.typicode.com/todos/")
-      .then((data) => data.json())
-      .then((todos) => {
-        dispatch({
-          type: TODO.TODO_FETCH_COMPLETE,
-          payload: {
-            todos,
-          },
-        });
-      })
-      .finally(() => {
-        dispatch({
-          type: TODO.TODO_LOADING,
-          payload: {
-            isLoading: false,
-          },
+    const {
+      user: {
+        user: { uid },
+      },
+    } = getState();
+
+    const userTodoCollectionReference = collection(db, `users/${uid}/todos`);
+    const todosQuery = query(userTodoCollectionReference);
+    const todosCollectionData = await getDocs(todosQuery);
+
+    if (todosCollectionData.size) {
+      let arr = [];
+      todosCollectionData.forEach((todo) => {
+        console.log(todo.data());
+        arr.push({
+          id: todo.id,
+          ...todo.data(),
         });
       });
+
+      dispatch({
+        type: TODO.TODO_FETCH_COMPLETE,
+        payload: {
+          todos: arr,
+        },
+      });
+    } else {
+      dispatch({
+        type: TODO.TODO_FETCH_COMPLETE,
+        payload: {
+          todos: [],
+        },
+      });
+    }
+
+    dispatch({
+      type: TODO.TODO_LOADING,
+      payload: {
+        isLoading: false,
+      },
+    });
   };
 };
 
@@ -104,24 +134,19 @@ export const userLogout = () => {
 export const addTodo = (todoText) => {
   return (dispatch, getState) => {
     const {
-      user: { user: uid },
+      user: {
+        user: { uid },
+      },
     } = getState();
+
+    const userTodoCollection = collection(db, `users/${uid}/todos`);
 
     const todo = {
       todoText,
       done: false,
     };
 
-    const userTodoCollection = collection(db, `users/${uid}/todos`);
-    // setDoc(userTodoCollection, {
-    //   todoText,
-    //   done: false,
-    // });
-
-    addDoc(userTodoCollection, {
-      name: "Tokyo",
-      country: "Japan",
-    });
+    addDoc(userTodoCollection, todo);
 
     dispatch({
       type: TODO.TODO_ADD,

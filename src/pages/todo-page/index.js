@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { UserInput } from "../../components/user-input";
 import { TodoList } from "../../components/todo-list";
 import { TodoFilter } from "../../components/todo-filter";
@@ -12,7 +12,9 @@ export const TodoPage = () => {
   const todoInputRef = useRef();
   const dispatch = useDispatch();
 
-  dispatch(loadTodos());
+  useEffect(() => {
+    dispatch(loadTodos());
+  }, [dispatch, loadTodos]);
 
   return (
     <div className={styles.wrapper}>

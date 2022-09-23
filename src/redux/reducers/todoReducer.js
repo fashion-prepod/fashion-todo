@@ -31,11 +31,7 @@ export const todoReducer = (state = initialState, action) => {
     case TODO.TODO_FETCH_COMPLETE:
       return {
         ...state,
-        todos: action.payload.todos.map(({ id, title, completed }) => ({
-          id,
-          done: completed,
-          todoText: title,
-        })),
+        todos: action.payload.todos,
       };
     case TODO.TODO_LOADING:
       return {
